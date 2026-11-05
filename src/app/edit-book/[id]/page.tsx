@@ -28,6 +28,7 @@ export default function EditBookPage() {
   const { data: session, isPending } = useSession();
 
   const [book, setBook] = useState<Book | null>(null);
+
   const [formData, setFormData] = useState({
     title: "",
     author: "",
@@ -142,8 +143,13 @@ export default function EditBookPage() {
 
   if (isPending || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        Loading book information...
+      <div className="flex min-h-screen items-center justify-center bg-[#faf9f6] px-4">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-9 w-9 animate-spin rounded-full border-4 border-gray-200 border-t-gray-900" />
+          <p className="text-sm font-medium text-gray-600">
+            Loading book information...
+          </p>
+        </div>
       </div>
     );
   }
@@ -152,140 +158,209 @@ export default function EditBookPage() {
 
   if (error && !book) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-5">
-        <p className="text-center text-red-600">{error}</p>
+      <main className="flex min-h-screen flex-col items-center justify-center bg-[#faf9f6] gap-4 px-4">
+        <p className="max-w-md text-center text-sm leading-6 text-red-600 sm:text-base">
+          {error}
+        </p>
+
         <Link
           href="/my-books"
-          className="rounded-lg bg-gray-900 px-5 py-3 text-white"
+          className="rounded-lg bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-700"
         >
           Back to My Books
         </Link>
-      </div>
+      </main>
     );
   }
 
   if (!book) return null;
 
   return (
-    <main className="min-h-screen bg-[#faf9f6] px-5 py-12">
-      <div className="mx-auto max-w-2xl rounded-2xl bg-white p-7 shadow-sm md:p-10">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Edit Book
-        </h1>
+    <main className="min-h-screen bg-[#faf9f6] px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto w-full max-w-2xl">
 
-        <p className="mt-2 text-gray-600">
-          Update your book information.
-        </p>
+        {/* Heading */}
+        <div className="mb-6 text-center sm:mb-8">
+          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-amber-700">
+            Manage Your Collection
+          </p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-          <div>
-            <label className="mb-2 block font-medium">Book Title</label>
-            <input
-              name="title"
-              type="text"
-              required
-              value={formData.title}
-              onChange={handleChange}
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
-            />
-          </div>
+          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
+            Edit Book
+          </h1>
 
-          <div>
-            <label className="mb-2 block font-medium">Author</label>
-            <input
-              name="author"
-              type="text"
-              required
-              value={formData.author}
-              onChange={handleChange}
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
-            />
-          </div>
+          <p className="mt-2 text-sm leading-6 text-gray-600 sm:text-base">
+            Update your book information.
+          </p>
+        </div>
 
-          <div>
-            <label className="mb-2 block font-medium">Category</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
-            >
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* Form Card */}
+        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6 md:p-8">
+          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
 
-          <div>
-            <label className="mb-2 block font-medium">Image URL</label>
-            <input
-              name="image"
-              type="url"
-              required
-              value={formData.image}
-              onChange={handleChange}
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
-            />
-          </div>
+            {/* Book Title */}
+            <div>
+              <label
+                htmlFor="title"
+                className="mb-2 block text-sm font-semibold text-gray-800"
+              >
+                Book Title
+              </label>
 
-          <div>
-            <label className="mb-2 block font-medium">
-              Description
-            </label>
-            <textarea
-              name="description"
-              required
-              rows={5}
-              value={formData.description}
-              onChange={handleChange}
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
-            />
-          </div>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                required
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Enter book title"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
+              />
+            </div>
 
-          <div>
-            <label className="mb-2 block font-medium">
-              Total Copies
-            </label>
-            <input
-              name="totalCopies"
-              type="number"
-              min="1"
-              step="1"
-              required
-              value={formData.totalCopies}
-              onChange={handleChange}
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
-            />
-            <p className="mt-2 text-xs text-gray-500">
-              Current available copies: {book.availableCopies}
-            </p>
-          </div>
+            {/* Author */}
+            <div>
+              <label
+                htmlFor="author"
+                className="mb-2 block text-sm font-semibold text-gray-800"
+              >
+                Author
+              </label>
 
-          {error && (
-            <p className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
-              {error}
-            </p>
-          )}
+              <input
+                id="author"
+                name="author"
+                type="text"
+                required
+                value={formData.author}
+                onChange={handleChange}
+                placeholder="Enter author name"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
+              />
+            </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <button
-              type="submit"
-              disabled={submitting}
-              className="flex-1 rounded-lg bg-gray-900 px-6 py-3 font-semibold text-white hover:bg-gray-700 disabled:opacity-50"
-            >
-              {submitting ? "Updating..." : "Update Book"}
-            </button>
+            {/* Category */}
+            <div>
+              <label
+                htmlFor="category"
+                className="mb-2 block text-sm font-semibold text-gray-800"
+              >
+                Category
+              </label>
 
-            <Link
-              href="/my-books"
-              className="flex-1 rounded-lg border border-gray-300 px-6 py-3 text-center font-semibold text-gray-700 hover:bg-gray-100"
-            >
-              Cancel
-            </Link>
-          </div>
-        </form>
+              <select
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Image URL */}
+            <div>
+              <label
+                htmlFor="image"
+                className="mb-2 block text-sm font-semibold text-gray-800"
+              >
+                Image URL
+              </label>
+
+              <input
+                id="image"
+                name="image"
+                type="url"
+                required
+                value={formData.image}
+                onChange={handleChange}
+                placeholder="Enter book image URL"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
+              />
+            </div>
+
+            {/* Description */}
+            <div>
+              <label
+                htmlFor="description"
+                className="mb-2 block text-sm font-semibold text-gray-800"
+              >
+                Description
+              </label>
+
+              <textarea
+                id="description"
+                name="description"
+                required
+                rows={5}
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Write a short description..."
+                className="w-full resize-y rounded-lg border border-gray-300 px-4 py-3 text-sm leading-6 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
+              />
+            </div>
+
+            {/* Total Copies */}
+            <div>
+              <label
+                htmlFor="totalCopies"
+                className="mb-2 block text-sm font-semibold text-gray-800"
+              >
+                Total Copies
+              </label>
+
+              <input
+                id="totalCopies"
+                name="totalCopies"
+                type="number"
+                min="1"
+                step="1"
+                required
+                value={formData.totalCopies}
+                onChange={handleChange}
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
+              />
+
+              <p className="mt-2 text-xs text-gray-500">
+                Current available copies:{" "}
+                <span className="font-semibold text-green-700">
+                  {book.availableCopies}
+                </span>
+              </p>
+            </div>
+
+            {/* Error */}
+            {error && (
+              <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+                {error}
+              </p>
+            )}
+
+            {/* Buttons */}
+            <div className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2">
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full rounded-lg bg-gray-900 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
+              >
+                {submitting ? "Updating..." : "Update Book"}
+              </button>
+
+              <Link
+                href="/my-books"
+                className="flex w-full items-center justify-center rounded-lg border border-gray-300 px-6 py-3.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 sm:text-base"
+              >
+                Cancel
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
     </main>
   );
