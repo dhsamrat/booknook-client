@@ -93,58 +93,92 @@ export default function AddBookPage() {
 
   if (isPending || !session) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        Loading...
+      <div className="flex min-h-screen items-center justify-center bg-[#faf9f6] px-4">
+        <p className="text-sm font-medium text-gray-600">
+          Loading...
+        </p>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#faf9f6] px-4 py-12">
-      <div className="mx-auto max-w-2xl">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">
-          Add a New Book
-        </h1>
+    <main className="min-h-screen bg-[#faf9f6] px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto w-full max-w-2xl">
+        {/* Heading */}
+        <div className="mb-6 text-center sm:mb-8">
+          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-amber-700">
+            BookNook Library
+          </p>
 
-        <p className="mb-8 text-gray-600">
-          Add a new book to the BookNook library.
-        </p>
+          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
+            Add a New Book
+          </h1>
 
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-gray-600 sm:text-base">
+            Share a new book with readers and expand the BookNook library.
+          </p>
+        </div>
+
+        {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+          className="space-y-5 rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:space-y-6 sm:p-6 md:p-8"
         >
+          {/* Book Title */}
           <div>
-            <label className="mb-2 block font-medium">Book Title</label>
+            <label
+              htmlFor="title"
+              className="mb-2 block text-sm font-semibold text-gray-800"
+            >
+              Book Title
+            </label>
+
             <input
+              id="title"
               name="title"
               value={formData.title}
               onChange={handleChange}
               required
               placeholder="Enter book title"
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
             />
           </div>
 
+          {/* Author */}
           <div>
-            <label className="mb-2 block font-medium">Author</label>
+            <label
+              htmlFor="author"
+              className="mb-2 block text-sm font-semibold text-gray-800"
+            >
+              Author
+            </label>
+
             <input
+              id="author"
               name="author"
               value={formData.author}
               onChange={handleChange}
               required
               placeholder="Enter author name"
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
             />
           </div>
 
+          {/* Category */}
           <div>
-            <label className="mb-2 block font-medium">Category</label>
+            <label
+              htmlFor="category"
+              className="mb-2 block text-sm font-semibold text-gray-800"
+            >
+              Category
+            </label>
+
             <select
+              id="category"
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
             >
               <option value="Fiction">Fiction</option>
               <option value="Science">Science</option>
@@ -154,37 +188,59 @@ export default function AddBookPage() {
             </select>
           </div>
 
+          {/* Image URL */}
           <div>
-            <label className="mb-2 block font-medium">
+            <label
+              htmlFor="image"
+              className="mb-2 block text-sm font-semibold text-gray-800"
+            >
               Book Image URL
             </label>
+
             <input
+              id="image"
               type="url"
               name="image"
               value={formData.image}
               onChange={handleChange}
               required
               placeholder="https://example.com/book-image.jpg"
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
             />
           </div>
 
+          {/* Description */}
           <div>
-            <label className="mb-2 block font-medium">Description</label>
+            <label
+              htmlFor="description"
+              className="mb-2 block text-sm font-semibold text-gray-800"
+            >
+              Description
+            </label>
+
             <textarea
+              id="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
               required
               rows={5}
-              placeholder="Write a short description..."
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
+              placeholder="Write a short description about the book..."
+              className="w-full resize-y rounded-lg border border-gray-300 px-4 py-3 text-sm leading-6 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
             />
           </div>
 
+          {/* Total Copies */}
           <div>
-            <label className="mb-2 block font-medium">Total Copies</label>
+            <label
+              htmlFor="totalCopies"
+              className="mb-2 block text-sm font-semibold text-gray-800"
+            >
+              Total Copies
+            </label>
+
             <input
+              id="totalCopies"
               type="number"
               name="totalCopies"
               value={formData.totalCopies}
@@ -192,20 +248,26 @@ export default function AddBookPage() {
               min="1"
               step="1"
               required
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
             />
+
+            <p className="mt-1.5 text-xs text-gray-500">
+              Enter the total number of available book copies.
+            </p>
           </div>
 
+          {/* Error */}
           {error && (
-            <p className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
               {error}
             </p>
           )}
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-gray-900 px-5 py-3 font-semibold text-white transition hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-lg bg-gray-900 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-gray-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:text-base"
           >
             {loading ? "Adding Book..." : "Add Book"}
           </button>
