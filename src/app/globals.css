@@ -128,3 +128,22 @@
     @apply font-sans;
   }
 }
+
+
+
+.home-hero-swiper .swiper-button-next,
+.home-hero-swiper .swiper-button-prev {
+  color: white;
+}
+
+.home-hero-swiper .swiper-button-next::after,
+.home-hero-swiper .swiper-button-prev::after {
+  font-size: 22px;
+}
+
+@media (max-width: 640px) {
+  .home-hero-swiper .swiper-button-next,
+  .home-hero-swiper .swiper-button-prev {
+    display: none;
+  }
+}
