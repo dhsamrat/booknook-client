@@ -1,7 +1,10 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/ui/Navbar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +21,10 @@ export const metadata: Metadata = {
   description:
     "Discover, borrow and share your favorite books with BookNook.",
 };
-export default function RootLayout({ children }: LayoutProps<"/">) {
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
@@ -27,7 +33,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}
-        </body>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          theme="light"
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+        />
+      </body>
     </html>
   );
 }
