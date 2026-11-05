@@ -3,6 +3,7 @@
 
 import { useEffect, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import { useSession } from "@/lib/auth-client";
 import { createBook } from "@/lib/api";
 
@@ -48,7 +49,9 @@ export default function AddBookPage() {
     const totalCopies = Number(formData.totalCopies);
 
     if (!Number.isInteger(totalCopies) || totalCopies < 1) {
-      setError("Total copies must be a positive whole number.");
+      const message = "Total copies must be a positive whole number.";
+      setError(message);
+      toast.error(message);
       return;
     }
 
@@ -73,13 +76,16 @@ export default function AddBookPage() {
         },
       });
 
-      alert("Book added successfully!");
+      toast.success("Book added successfully!");
+
       router.push("/my-books");
       router.refresh();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to add book."
-      );
+      const message =
+        err instanceof Error ? err.message : "Failed to add book.";
+
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

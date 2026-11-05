@@ -1,8 +1,10 @@
+
 "use client";
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useSession } from "@/lib/auth-client";
 import {
   getBookById,
@@ -103,7 +105,9 @@ export default function EditBookPage() {
     const totalCopies = Number(formData.totalCopies);
 
     if (!Number.isInteger(totalCopies) || totalCopies < 1) {
-      setError("Total copies must be a positive whole number.");
+      const message = "Total copies must be a positive whole number.";
+      setError(message);
+      toast.error(message);
       return;
     }
 
@@ -121,13 +125,16 @@ export default function EditBookPage() {
         totalCopies,
       });
 
-      alert("Book updated successfully!");
+      toast.success("Book updated successfully!");
+
       router.push("/my-books");
       router.refresh();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to update book."
-      );
+      const message =
+        err instanceof Error ? err.message : "Failed to update book.";
+
+      setError(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -245,6 +252,7 @@ export default function EditBookPage() {
               name="totalCopies"
               type="number"
               min="1"
+              step="1"
               required
               value={formData.totalCopies}
               onChange={handleChange}

@@ -1,8 +1,10 @@
+
 "use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useSession } from "@/lib/auth-client";
 import { getBorrows, returnBook, type Borrow } from "@/lib/api";
 
@@ -30,11 +32,13 @@ export default function MyBorrowsPage() {
         const response = await getBorrows(session.user.email);
         setBorrows(response.data);
       } catch (err) {
-        setError(
+        const message =
           err instanceof Error
             ? err.message
-            : "Failed to load borrow records."
-        );
+            : "Failed to load borrow records.";
+
+        setError(message);
+        toast.error(message);
       } finally {
         setLoading(false);
       }
@@ -60,11 +64,13 @@ export default function MyBorrowsPage() {
         previous.filter((borrow) => borrow._id !== id)
       );
 
-      alert("Book returned successfully!");
+      toast.success("Book returned successfully!");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to return book."
-      );
+      const message =
+        err instanceof Error ? err.message : "Failed to return book.";
+
+      setError(message);
+      toast.error(message);
     } finally {
       setReturningId(null);
     }

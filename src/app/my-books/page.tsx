@@ -1,8 +1,10 @@
+
 "use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useSession } from "@/lib/auth-client";
 import {
   deleteBook,
@@ -42,9 +44,11 @@ export default function MyBooksPage() {
 
         setBooks(myBooks);
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load books."
-        );
+        const message =
+          err instanceof Error ? err.message : "Failed to load books.";
+
+        setError(message);
+        toast.error(message);
       } finally {
         setLoading(false);
       }
@@ -70,11 +74,13 @@ export default function MyBooksPage() {
         previous.filter((book) => book._id !== id)
       );
 
-      alert("Book deleted successfully!");
+      toast.success("Book deleted successfully!");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to delete book."
-      );
+      const message =
+        err instanceof Error ? err.message : "Failed to delete book.";
+
+      setError(message);
+      toast.error(message);
     } finally {
       setDeletingId(null);
     }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useSession } from "@/lib/auth-client";
 import { borrowBook, getBookById, type Book } from "@/lib/api";
 
@@ -28,9 +29,11 @@ export default function BorrowPage() {
         const response = await getBookById(id);
         setBook(response.data);
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load book."
-        );
+        const message =
+          err instanceof Error ? err.message : "Failed to load book.";
+
+        setError(message);
+        toast.error(message);
       } finally {
         setLoading(false);
       }
@@ -50,17 +53,23 @@ export default function BorrowPage() {
     setError("");
 
     if (!session?.user) {
-      setError("Please login first.");
+      const message = "Please login first.";
+      setError(message);
+      toast.error(message);
       return;
     }
 
     if (!borrowDate || !returnDate) {
-      setError("Please select both dates.");
+      const message = "Please select both dates.";
+      setError(message);
+      toast.error(message);
       return;
     }
 
     if (returnDate <= borrowDate) {
-      setError("Return date must be after borrow date.");
+      const message = "Return date must be after borrow date.";
+      setError(message);
+      toast.error(message);
       return;
     }
 
@@ -75,12 +84,14 @@ export default function BorrowPage() {
         returnDate,
       });
 
-      alert("Book borrowed successfully!");
+      toast.success("Book borrowed successfully!");
       router.push("/my-borrows");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to borrow book."
-      );
+      const message =
+        err instanceof Error ? err.message : "Failed to borrow book.";
+
+      setError(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
