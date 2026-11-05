@@ -1,4 +1,6 @@
 
+import { authClient } from "@/lib/auth-client";
+
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -44,19 +46,41 @@ async function apiRequest<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
+  const method = (options.method || "GET").toUpperCase();
+
+  const requiresAuth =
+    endpoint.startsWith("/borrows") ||
+    (endpoint.startsWith("/books") && method !== "GET");
+
+  const headers = new Headers(options.headers);
+
+  if (options.body && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  // Attach JWT only to protected requests
+  if (requiresAuth) {
+    const { data, error } = await authClient.token();
+
+    if (error || !data?.token) {
+      throw new Error("Please login to continue.");
+    }
+
+    headers.set("Authorization", `Bearer ${data.token}`);
+  }
+
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     credentials: "include",
-    headers: {
-      ...(options.body ? { "Content-Type": "application/json" } : {}),
-      ...options.headers,
-    },
+    headers,
   });
 
   const result = await response.json();
 
   if (!response.ok || result.success === false) {
-    throw new Error(result.message || "Something went wrong");
+    throw new Error(
+      result.message || "Something went wrong"
+    );
   }
 
   return result;
@@ -79,7 +103,9 @@ export const getBookById = async (id: string) => {
 };
 
 // Add new book
-export const createBook = async (bookData: Omit<Book, "_id" | "availableCopies" | "createdAt">) => {
+export const createBook = async (
+  bookData: Omit<Book, "_id" | "availableCopies" | "createdAt">
+) => {
   return apiRequest<ApiResponse<Book>>("/books", {
     method: "POST",
     body: JSON.stringify(bookData),
